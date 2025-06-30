@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Leer CSV
-df = pd.read_csv("datos_logistica_2.csv")
+df = pd.read_csv("datos_logistica.csv")
 
 # Limpiar y normalizar columna 'estabilidad'
 df['estabilidad'] = df['estabilidad'].astype(str).str.strip().str.upper()
