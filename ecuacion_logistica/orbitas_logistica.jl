@@ -1,6 +1,6 @@
 using RadiiPolynomial
 
-include("estabilidad.jl")
+include("../estabilidad/estabilidad.jl")
 using .Estabilidad
 
 const ERROR = 1.0e-3

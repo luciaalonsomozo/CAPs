@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Leer CSV
-df = pd.read_csv("datos_dp_11_06_aumentando_periodo.csv")
+df = pd.read_csv("datos.csv")
 
 # Limpiar y normalizar columna 'estabilidad'
 df['estabilidad'] = df['estabilidad'].astype(str).str.strip().str.upper()
@@ -51,11 +51,7 @@ for p in range(2, 6):  # 2 a 5
 for p in range(6, 11):  # 6 a 10
     colores_por_periodo[p] = colores_rosas[p - 6]
 
-# --- MODIFICACIONES PRINCIPALES AQUÍ ---
-
-# Crear figura con 2x1 subplots (2 filas, 1 columna)
-# Ajustamos el figsize para una mejor visualización vertical
-fig, axes = plt.subplots(2, 1, figsize=(7, 10)) # Ancho 7, Alto 10 (ejemplo, ajusta según necesites)
+fig, axes = plt.subplots(2, 1, figsize=(7, 10))
 
 estabilidades = ["E", "I"]  # Solo estas dos
 
@@ -82,9 +78,6 @@ for i, est in enumerate(estabilidades):
         ax.set_title(f"Órbitas inestables")
 
     ax.set_xlabel("b")
-    # Configurar el label 'k' en vertical
-    # Usamos rotation=0 y ha='right' para que 'k' se lea horizontalmente al lado del eje
-    # Si quieres que 'k' se lea de abajo a arriba, usa rotation=90
     ax.set_ylabel("k", rotation=0, ha='right')
 
     ax.legend(fontsize='small')

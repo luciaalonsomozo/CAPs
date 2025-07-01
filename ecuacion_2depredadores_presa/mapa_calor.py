@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Leer CSV
-df = pd.read_csv("datos_dp_11_06_aumentando_periodo.csv")
+df = pd.read_csv("datos.csv")
 
 # Limpiar y normalizar columna 'estabilidad'
 df['estabilidad'] = df['estabilidad'].astype(str).str.strip().str.upper()

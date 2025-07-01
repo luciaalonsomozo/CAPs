@@ -1,5 +1,7 @@
 using Plots
-using RadiiPolynomial, Random
+using RadiiPolynomial
+using CSV
+using DataFrames
 
 include("estabilidad.jl")
 using .Estabilidad
@@ -37,13 +39,14 @@ end
 function newton_orbit_algorithm(F_DF, n; error_threshold=1e-6, max_iter=100)
     iter = 0
     initial_guess = 10 * rand(n)
+    println("initial_guess = ", initial_guess)
     x_bar = initial_guess
     success = false
 
     while !success && iter < max_iter
         iter += 1
         try
-            x_bar, success = newton(F_DF, initial_guess, maxiter=50)
+            x_bar, success = newton(F_DF, initial_guess, maxiter=20)
         catch
         end
 
@@ -54,30 +57,38 @@ function newton_orbit_algorithm(F_DF, n; error_threshold=1e-6, max_iter=100)
         else
             println(success ? "Fixed point found: $x_bar" : "Failed iteration.")
             initial_guess = 10 * rand(n)
+            println("initial_guess = ", initial_guess)
         end
     end
 
     return 0, false
 end
 
-function main(b_str::String, k_str::String, n::Int)
+function agregar_fila_csv(archivo::String, a::String, b::String, n::Int, texto::String)
+    df = DataFrame(b = [a], k = [b], periodo = [n], estabilidad = [texto])
+    # Usamos `append=true` para no sobrescribir el archivo
+    CSV.write(archivo, df; append=true, writeheader=!isfile(archivo))
+end
+
+function run_main(b_str::String, k_str::String, n::Int)
     ib = eval(Meta.parse("@interval($b_str)"))
     ik = eval(Meta.parse("@interval($k_str)"))
 
     b = mid(ib)
     k = mid(ik)
-
     F_DF(x) = (F(x, b, k, n), DF(x, k, n))
-    x_bar, success = newton_orbit_algorithm(F_DF, n; error_threshold=ERROR, max_iter=1000)
+    x_bar, success = newton_orbit_algorithm(F_DF, n; error_threshold=ERROR, max_iter=10)
 
     if !success
-        println("No se encontró una órbita de periodo $n.")
+        println("No se encontró una órbita de periodo $n para b = $b y k = $k.")
         return
     end
 
     println("x_bar = ", x_bar)
 
     A = inv(DF(x_bar, k, n))
+    ik = interval(k)
+    ib = interval(b)
     ix_bar = interval(x_bar)
     iA = interval(A)
 
@@ -85,7 +96,7 @@ function main(b_str::String, k_str::String, n::Int)
     Z₁ = opnorm(interval(I) - iA * DF(ix_bar, ik, n), 1)
     R = Inf
     ik_modulo = -interval(ik)
-    L = interval(2) * sqrt(interval(3)) / interval(18) * ik_modulo
+    L = sqrt(interval(3)) / interval(18) * ik_modulo
     Z₂ = L * opnorm(iA, 1)
 
     ie = interval_of_existence(Y, Z₁, Z₂, R)
@@ -104,6 +115,17 @@ function main(b_str::String, k_str::String, n::Int)
     end
 
     println("***************************ESTABILIDAD DE LA ORBITA***************************")
-    println(estabilidad(DG(enclosures, ik)))
+    agregar_fila_csv("datos.csv", b_str, k_str, n, estabilidad(DG(ix_bar, ik)))
+end
+
+function main()
+    for b_val in -20.0:0.25:-2.0
+        for k_val in -5.0:-0.25:-45.0
+            for n in 2:10
+                println("Running for b = $b_val, k = $k_val, n = $n")
+                run_main(string(b_val), string(k_val), n)
+            end
+        end
+    end
 
 end
