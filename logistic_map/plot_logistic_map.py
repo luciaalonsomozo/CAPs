@@ -6,7 +6,7 @@ plt.rcParams['text.latex.preamble'] = r'\usepackage{amsmath}'  # Even if LaTeX i
 plt.rcParams['mathtext.fontset'] = 'cm'  # Use the Computer Modern font for math text
 
 # Define the range of values for r
-r_values = np.arange(3, 4.0, 0.0001)
+r_values = np.arange(0, 4.0, 0.0001)
 
 # Number of iterations and the number to plot
 iterations = 2000
@@ -26,7 +26,7 @@ for i in range(iterations):
         plt.plot(r_values, x, ',k', alpha=0.75, markersize=0.5)
 
 # Configure the axes
-plt.xlim(3, 4)
+plt.xlim(0, 4)
 plt.title("Bifurcation diagram of the logistic map")
 plt.xlabel(r"$\mu$")
 plt.ylabel("x")
