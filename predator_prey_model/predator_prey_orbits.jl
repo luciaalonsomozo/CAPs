@@ -120,6 +120,11 @@ end
 
 # ==============================================================================
 # LOOP LOGIC USED TO GENERATE DATA:
+# ⚠️ WARNING: Running this entire grid sequentially involves ~17.5 million 
+# verification configurations. It WILL take a very long time and could freeze 
+# your machine. It is STRONGLY recommended to split this task:
+#   1. Chunk the execution by splitting the 'b' range (e.g., run -20.0 to -15.0).
+#   2. Parallelize the loops using Julia's multi-threading (`Threads.@threads`).
 # 
 # # Define ranges
 # b_start, b_end, b_step = -20.0, -2.5, 0.01
