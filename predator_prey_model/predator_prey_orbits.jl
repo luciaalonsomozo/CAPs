@@ -117,3 +117,36 @@ function main(b_str::String, k_str::String, n::Int)
     println(stability(DG(enclosures, ik)))
     println(DG(enclosures, ik))
 end
+
+# ==============================================================================
+# LOOP LOGIC USED TO GENERATE DATA:
+# 
+# # Define ranges
+# b_start, b_end, b_step = -20.0, -2.5, 0.01
+# k_start, k_end, k_step = -45.0, -5.0, 0.001
+# periods = [2, 4, 6, 8, 10]
+# 
+# # Open file to append results
+# open("orbits_stability.csv", "w") do io
+#     println(io, "b,k,period,stability") # Header
+#     
+#     # Loop through b values
+#     for b_val in b_start:b_step:b_end
+#         b_str = string(b_val)
+#         
+#         # Loop through k values (incrementing from -45.0 towards -5.0)
+#         for k_val in k_start:k_step:k_end
+#             k_str = string(round(k_val, digits=3)) # Handle floating-point precision
+#             
+#             # Check different period sizes
+#             for n in periods
+#                 
+#                 # Redirect or capture output from main(b_str, k_str, n)
+#                 # If 'stability' returns "U" (Unstable), it prints to the file:
+#                 # println(io, "$b_str,$k_str,$n,U")
+#                 
+#             end
+#         end
+#     end
+# end
+# ==============================================================================
